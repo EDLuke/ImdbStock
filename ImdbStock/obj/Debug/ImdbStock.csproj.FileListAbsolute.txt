@@ -4,3 +4,9 @@ C:\Users\laz216\Desktop\ImdbStock\ImdbStock\ImdbStock\bin\Debug\ImdbStock.pdb
 C:\Users\laz216\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.csprojResolveAssemblyReference.cache
 C:\Users\laz216\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.exe
 C:\Users\laz216\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.pdb
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\bin\Debug\ImdbStock.exe.config
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\bin\Debug\ImdbStock.exe
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\bin\Debug\ImdbStock.pdb
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\obj\Debug\ImdbStock.csprojResolveAssemblyReference.cache
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\obj\Debug\ImdbStock.exe
+C:\Users\laz216\Desktop\ImdbStock-master\ImdbStock\obj\Debug\ImdbStock.pdb
