@@ -48,7 +48,7 @@ namespace ImdbStock
             StreamReader reader = new StreamReader(dataStream);
             // Read the content.
             string responseFromServer = reader.ReadToEnd();
-            Console.WriteLine(responseFromServer);
+            //Console.WriteLine(responseFromServer);
             // Clean up the streams and the response.
             reader.Close();
             response.Close();

@@ -6,19 +6,13 @@ using System.Threading.Tasks;
 using System.Net;
 using System.IO;
 using System.Xml;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace ImdbStock
 {
     class ImdbScoreList
     {
         public const int DAYS = 5;
-        struct Movie
-        {
-            public string id;
-            public string title;
-            public DateTime releaseDate;
-            public float score;
-        }
 
         Dictionary<string, int> months = new Dictionary<string, int>()
         {
@@ -52,28 +46,60 @@ namespace ImdbStock
             Tuple.Create<string, string, string, DateTime>("Lionsgate", "0173285", "LGF", new DateTime(1998, 11, 17)),
             Tuple.Create<string, string, string, DateTime>("Twentieth Century Fox Film Corporation", "0000756", "FOX", new DateTime(1987, 12, 30))
         };
+
+        private List<Company> companyList = new List<Company>();
         
 
         public ImdbScoreList()
         {
             DateTime now = DateTime.Now;
-            string rawHTML = RequestImdbHTML(companyIds[0]);
-            List<string> movieIds = ParseHTML(rawHTML);
-            foreach (string movieId in movieIds) {
-                Movie movie = RequestMovieXML(movieId);
-                if (movie.releaseDate.CompareTo(companies[0].Item4) <= 0) {
-                    break;
+            LoadCompanies();
+            foreach (Tuple<string, string, string, DateTime> c in companies)
+            {
+                string rawHTML = RequestImdbHTML(companies[1].Item2);
+                List<string> movieIds = ParseHTML(rawHTML);
+                foreach (string movieId in movieIds)
+                {
+                    Movie movie = RequestMovieXML(movieId);
+                    if (movie.m_releaseDate.CompareTo(companies[1].Item4) <= 0)
+                    {
+                        break;
+                    }
+                    if (movie.m_releaseDate.CompareTo(now) < 0)
+                    {
+                        YahooFinance finance = new YahooFinance(companies[1].Item3);
+                        //Console.WriteLine(movie.m_title + "\t" + movie.m_score);
+                        finance.RequestFinanceQuotesCSV(movie.m_releaseDate, new TimeSpan(DAYS, 0, 0, 0));
+                    }
                 }
-                //Console.WriteLine(movie.releaseDate);
-                if (movie.releaseDate.CompareTo(now) < 0) {
-                    YahooFinance finance = new YahooFinance(companies[0].Item3);
-                    Console.WriteLine(movie.title + "\t" + movie.score);
-                    finance.RequestFinanceQuotesCSV(movie.releaseDate, new TimeSpan(DAYS, 0, 0, 0));
-                }
-                
+
             }
-            
+
+            SaveCompanies();
         }
+
+        private void LoadCompanies()
+        {
+            if (File.Exists("company.bin"))
+            {
+                using (Stream stream = File.Open("company.bin", FileMode.Create))
+                {
+                    BinaryFormatter bin = new BinaryFormatter();
+                    companyList = bin.Deserialize(stream) as List<Company>;
+                }
+            }            
+        }
+
+        private void SaveCompanies()
+        {
+            using (Stream stream = File.Open("company.bin", FileMode.Create))
+            {
+                BinaryFormatter bin = new BinaryFormatter();
+                bin.Serialize(stream, companyList);
+            }
+        }
+
+        
 
 
         private string RequestImdbHTML(string companyId)
@@ -117,14 +143,16 @@ namespace ImdbStock
             StreamReader reader = new StreamReader(dataStream);
             // Read the content.
             string responseFromServer = reader.ReadToEnd();
-            Movie movie = new Movie();
-            movie.id = movieId;
+            string m_id = movieId;
+            string m_title;
+            DateTime m_releaseDate;
+            float m_score;
             using (XmlReader xmlReader = XmlReader.Create(new StringReader(responseFromServer)))
             {
                 DateTime releasedDate = new DateTime();
                 xmlReader.ReadToFollowing("movie");
                 xmlReader.MoveToAttribute("title");
-                movie.title = xmlReader.Value;
+                m_title = xmlReader.Value;
                 xmlReader.MoveToAttribute("year");
                 //cleaning year string
                 string yearString = xmlReader.Value;
@@ -148,20 +176,20 @@ namespace ImdbStock
                         month = months[date[1]];
                     }
                     releasedDate = new DateTime(year, month, day);
-                    movie.releaseDate = releasedDate;
+                    m_releaseDate = releasedDate;
                 }
                 //if no release date is set yet, use today's (days ago) date and the provided year
                 else {
                     DateTime durationAgo = DateTime.Now.Subtract(new TimeSpan(DAYS, 0, 0, 0));
                     Console.WriteLine(durationAgo);
-                    movie.releaseDate = new DateTime(year, durationAgo.Month, durationAgo.Day);
+                    m_releaseDate = new DateTime(year, durationAgo.Month, durationAgo.Day);
                 }
                 
                 xmlReader.MoveToAttribute("imdbRating");
-                movie.score = (xmlReader.Value.Equals("N/A")) ? 0f : Single.Parse(xmlReader.Value);
+                m_score = (xmlReader.Value.Equals("N/A")) ? 0f : Single.Parse(xmlReader.Value);
             }
 
-            return movie;
+            return new Movie(m_id, m_title, m_releaseDate, m_score);
         }
 
         private List<string> ParseHTML(string rawHTML)

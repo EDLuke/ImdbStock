@@ -16,3 +16,9 @@ D:\Visual Studio Projects\ImdbStock\ImdbStock\obj\Debug\ImdbStock.pdb
 D:\Visual Studio Projects\ImdbStock\ImdbStock\bin\Debug\ImdbStock.exe
 D:\Visual Studio Projects\ImdbStock\ImdbStock\bin\Debug\ImdbStock.pdb
 D:\Visual Studio Projects\ImdbStock\ImdbStock\obj\Debug\ImdbStock.csprojResolveAssemblyReference.cache
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\bin\Debug\ImdbStock.exe.config
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\bin\Debug\ImdbStock.exe
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\bin\Debug\ImdbStock.pdb
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.csprojResolveAssemblyReference.cache
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.exe
+C:\Users\lzhang\Desktop\ImdbStock\ImdbStock\ImdbStock\obj\Debug\ImdbStock.pdb
